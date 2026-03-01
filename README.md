@@ -175,15 +175,51 @@ Query params: `agent_id`, `kinds`, `tags`, `limit`, `offset`, `order_by`, `order
 | `--db` | `AGENTMEM_DB` | `agentmem.db` | SQLite database path |
 | `--host` | `AGENTMEM_HOST` | `0.0.0.0` | Bind address |
 
+## Embedding Providers
+
+AgentMem supports multiple embedding providers. Default is local (no API key needed).
+
+### Local (default)
+```bash
+npx agent-mem serve
+# Uses all-MiniLM-L6-v2 (384 dims), runs in-process
+```
+
+### OpenAI
+```bash
+OPENAI_API_KEY=sk-... npx agent-mem serve --embedder openai
+# Uses text-embedding-3-small (1536 dims)
+```
+
+### Ollama
+```bash
+ollama pull nomic-embed-text
+npx agent-mem serve --embedder ollama
+# Uses nomic-embed-text (768 dims), fully local
+```
+
+### As a Library
+```typescript
+import { SQLiteStore, OpenAIEmbeddingProvider, OllamaEmbeddingProvider } from 'agent-mem';
+
+// OpenAI
+const embedder = new OpenAIEmbeddingProvider({ apiKey: 'sk-...' });
+
+// Ollama
+const embedder = new OllamaEmbeddingProvider({ model: 'nomic-embed-text' });
+
+// Custom — implement EmbeddingProvider interface
+```
+
 ## Architecture
 
 - **Storage:** SQLite (single file, portable, WAL mode for concurrency)
-- **Embeddings:** Local via `all-MiniLM-L6-v2` (384 dimensions, runs in-process)
+- **Embeddings:** Pluggable — local (all-MiniLM-L6-v2), OpenAI, Ollama, or custom
 - **Search:** Cosine similarity on embeddings + optional tag/kind filtering
 - **IDs:** ULID (sortable, unique, URL-safe)
 - **API:** Hono (fast, lightweight, standard Web API)
 
-No external services. No API keys. No Docker. Just `npx agent-mem serve`.
+No external services required. No Docker. Just `npx agent-mem serve`.
 
 ## MCP Server (Model Context Protocol)
 
@@ -226,7 +262,7 @@ Add to your `claude_desktop_config.json`:
 
 ## Roadmap
 
-- [ ] Pluggable embedding providers (OpenAI, Ollama, Cohere)
+- [x] Pluggable embedding providers (OpenAI, Ollama, local)
 - [ ] Memory consolidation (merge similar memories)
 - [ ] Automatic decay (time-based importance reduction)
 - [ ] Conversation storage

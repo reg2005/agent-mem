@@ -12,6 +12,8 @@
 
 export { SQLiteStore } from './store.js';
 export { LocalEmbeddingProvider, cosineSimilarity } from './embeddings.js';
+export { OpenAIEmbeddingProvider } from './embeddings-openai.js';
+export { OllamaEmbeddingProvider } from './embeddings-ollama.js';
 export { createApp } from './server.js';
 export type {
   Memory,

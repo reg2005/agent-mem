@@ -4,7 +4,22 @@ import { Command } from 'commander';
 import { serve } from '@hono/node-server';
 import { SQLiteStore } from './store.js';
 import { LocalEmbeddingProvider } from './embeddings.js';
+import { OpenAIEmbeddingProvider } from './embeddings-openai.js';
+import { OllamaEmbeddingProvider } from './embeddings-ollama.js';
 import { createApp } from './server.js';
+import type { EmbeddingProvider } from './types.js';
+
+function createEmbedder(provider: string): EmbeddingProvider {
+  switch (provider) {
+    case 'openai':
+      return new OpenAIEmbeddingProvider();
+    case 'ollama':
+      return new OllamaEmbeddingProvider();
+    case 'local':
+    default:
+      return new LocalEmbeddingProvider();
+  }
+}
 
 const program = new Command();
 
@@ -21,12 +36,13 @@ program
   .option('-p, --port <port>', 'port to listen on', '3033')
   .option('-d, --db <path>', 'SQLite database path', 'agentmem.db')
   .option('--host <host>', 'host to bind to', '0.0.0.0')
+  .option('-e, --embedder <provider>', 'embedding provider: local, openai, ollama', 'local')
   .action(async (opts) => {
     const store = new SQLiteStore(opts.db);
     await store.init();
 
-    console.log('⏳ Loading embedding model (first run downloads ~23MB)...');
-    const embedder = new LocalEmbeddingProvider();
+    console.log(`⏳ Loading embedding model (${opts.embedder})...`);
+    const embedder = createEmbedder(opts.embedder);
     // Warm up the model
     await embedder.embed('warmup');
     console.log('✅ Embedding model loaded');
