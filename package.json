@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "agent-mem": "dist/cli.js"
+    "agent-mem": "dist/cli.js",
+    "agent-mem-mcp": "dist/mcp.js"
   },
   "scripts": {
     "build": "tsc",

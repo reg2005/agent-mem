@@ -149,4 +149,16 @@ program
     store.close();
   });
 
+// ── mcp ──────────────────────────────────────────────────
+
+program
+  .command('mcp')
+  .description('Start as an MCP (Model Context Protocol) server over stdio')
+  .option('-d, --db <path>', 'SQLite database path', 'agentmem.db')
+  .action(async (opts) => {
+    // Dynamically import and run the MCP server
+    process.argv = ['node', 'mcp', '--db', opts.db];
+    await import('./mcp.js');
+  });
+
 program.parse();

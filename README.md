@@ -185,13 +185,52 @@ Query params: `agent_id`, `kinds`, `tags`, `limit`, `offset`, `order_by`, `order
 
 No external services. No API keys. No Docker. Just `npx agent-mem serve`.
 
+## MCP Server (Model Context Protocol)
+
+AgentMem works as an MCP server, compatible with Claude Desktop, Cursor, and any MCP client:
+
+```bash
+# Start as MCP server (stdio transport)
+npx agent-mem mcp
+
+# Or with a specific database
+npx agent-mem mcp --db /path/to/memories.db
+```
+
+### Claude Desktop configuration
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "agent-mem": {
+      "command": "npx",
+      "args": ["agent-mem", "mcp"]
+    }
+  }
+}
+```
+
+### MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `memory_store` | Store a new memory with automatic embedding |
+| `memory_search` | Semantic search across memories |
+| `memory_get` | Get a specific memory by ID |
+| `memory_list` | List memories with filters |
+| `memory_update` | Update an existing memory |
+| `memory_delete` | Soft-delete a memory |
+| `memory_forget` | Bulk expire memories for an agent |
+
 ## Roadmap
 
 - [ ] Pluggable embedding providers (OpenAI, Ollama, Cohere)
 - [ ] Memory consolidation (merge similar memories)
 - [ ] Automatic decay (time-based importance reduction)
 - [ ] Conversation storage
-- [ ] MCP (Model Context Protocol) server
+- [x] MCP (Model Context Protocol) server
 - [ ] Web UI for browsing memories
 - [ ] Auth (API keys, JWT)
 
