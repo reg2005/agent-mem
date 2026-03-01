@@ -1,0 +1,53 @@
+{
+  "name": "agent-mem",
+  "version": "0.1.0",
+  "description": "Standalone persistent memory layer for AI agents. Framework-agnostic. Self-hosted. Zero config.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "agent-mem": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/cli.ts",
+    "start": "node dist/cli.js serve",
+    "test": "vitest"
+  },
+  "keywords": [
+    "agent",
+    "memory",
+    "ai",
+    "llm",
+    "persistent-memory",
+    "semantic-search",
+    "embeddings",
+    "sqlite",
+    "self-hosted",
+    "framework-agnostic"
+  ],
+  "author": "reg2005",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reg2005/agent-mem"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "@xenova/transformers": "^2.17.2",
+    "better-sqlite3": "^11.9.1",
+    "commander": "^13.1.0",
+    "hono": "^4.7.7",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.1"
+  }
+}
